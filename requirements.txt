@@ -1,1 +1,5 @@
 fastapi[all]
+motor
+jinja2
+python-multipart
+uvicorn

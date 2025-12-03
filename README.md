@@ -24,6 +24,15 @@ Or simply click:
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/render-examples/fastapi)
 
-## Thanks
+## Data Export / Download
 
-Thanks to [Harish](https://harishgarg.com) for the [inspiration to create a FastAPI quickstart for Render](https://twitter.com/harishkgarg/status/1435084018677010434) and for some sample code!
+You can view and download the collected data (Vlogs, Sentiments, GPS) at the following URI:
+
+`/data`
+
+For example, if your deployed URL is `https://emogo-backend.onrender.com`, go to:
+`https://emogo-backend.onrender.com/data`
+
+## Configuration
+
+Ensure you set the `MONGODB_URL` environment variable in your Render service settings to point to your MongoDB instance.
