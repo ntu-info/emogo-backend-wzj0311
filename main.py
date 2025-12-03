@@ -1,7 +1,10 @@
 import os
+import json
+import io
+import zipfile
 from typing import Optional, List, Dict, Any
 
-from fastapi import FastAPI, Request, UploadFile, File, HTTPException
+from fastapi import FastAPI, Request, UploadFile, File, HTTPException, Response
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
@@ -53,7 +56,7 @@ async def upload_vlog(file: UploadFile = File(...)):
     await grid_in.close()
     return {"status": "success", "file_id": str(grid_in._id)}
 
-@app.get("/data", response_class=HTMLResponse)
+@app.get("/download", response_class=HTMLResponse)
 async def view_data(request: Request):
     # Fetch recent data
     sentiments = await db.sentiments.find().sort("_id", -1).to_list(100)
@@ -72,7 +75,51 @@ async def view_data(request: Request):
         "vlogs": vlogs
     })
 
-@app.get("/download/vlog/{file_id}")
+@app.get("/download/sentiments")
+async def download_sentiments():
+    sentiments = await db.sentiments.find().to_list(None)
+    for s in sentiments:
+        s["_id"] = str(s["_id"])
+    
+    return Response(
+        content=json.dumps(sentiments, default=str),
+        media_type="application/json",
+        headers={"Content-Disposition": "attachment; filename=sentiments.json"}
+    )
+
+@app.get("/download/gps")
+async def download_gps():
+    gps_data = await db.gps.find().to_list(None)
+    for g in gps_data:
+        g["_id"] = str(g["_id"])
+        
+    return Response(
+        content=json.dumps(gps_data, default=str),
+        media_type="application/json",
+        headers={"Content-Disposition": "attachment; filename=gps_data.json"}
+    )
+
+@app.get("/download/vlogs")
+async def download_all_vlogs():
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
+        cursor = fs.find()
+        async for grid_out in cursor:
+            file_content = grid_out.read()
+            # Use filename if available, else use ID
+            filename = grid_out.filename if grid_out.filename else str(grid_out._id)
+            # Prepend ID to ensure uniqueness
+            unique_filename = f"{grid_out._id}_{filename}"
+            zip_file.writestr(unique_filename, file_content)
+    
+    zip_buffer.seek(0)
+    return StreamingResponse(
+        zip_buffer,
+        media_type="application/zip",
+        headers={"Content-Disposition": "attachment; filename=all_vlogs.zip"}
+    )
+
+@app.get("/download/vlogs/{file_id}")
 async def download_vlog(file_id: str):
     try:
         oid = ObjectId(file_id)

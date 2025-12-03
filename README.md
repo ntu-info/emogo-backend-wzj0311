@@ -27,12 +27,18 @@ Or simply click:
 ## Data Export / Download
 
 You can view and download the collected data (Vlogs, Sentiments, GPS) at the following URI:
+`https://emogo-backend-wzj0311.onrender.com/download`
 
-`/data`
+Download All Vlogs:
+`https://emogo-backend-wzj0311.onrender.com/download/vlogs`
 
-For example, if your deployed URL is `https://emogo-backend.onrender.com`, go to:
-`https://emogo-backend.onrender.com/data`
+Download Vlog:
+`https://emogo-backend-wzj0311.onrender.com/download/vlogs/{file_id}`
 
-## Configuration
+Download Sentiments:
+`https://emogo-backend-wzj0311.onrender.com/download/sentiments`
 
-Ensure you set the `MONGODB_URL` environment variable in your Render service settings to point to your MongoDB instance.
+Download Gps:
+`https://emogo-backend-wzj0311.onrender.com/download/gps`
+
+

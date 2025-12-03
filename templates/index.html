@@ -15,7 +15,7 @@
     <h1>EmoGo Collected Data</h1>
 
     <div class="section">
-        <h2>Vlogs</h2>
+        <h2>Vlogs <a href="/download/vlogs" style="font-size: 0.6em; margin-left: 10px;">Download All</a></h2>
         <table>
             <thead>
                 <tr>
@@ -27,7 +27,7 @@
                 {% for vlog in vlogs %}
                 <tr>
                     <td>{{ vlog.filename }}</td>
-                    <td><a href="/download/vlog/{{ vlog.id }}">Download</a></td>
+                    <td><a href="/download/vlogs/{{ vlog.id }}">Download</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -35,7 +35,7 @@
     </div>
 
     <div class="section">
-        <h2>Sentiments</h2>
+        <h2>Sentiments <a href="/download/sentiments" style="font-size: 0.6em; margin-left: 10px;">Download All</a></h2>
         <table>
             <thead>
                 <tr>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="section">
-        <h2>GPS Coordinates</h2>
+        <h2>GPS Coordinates <a href="/download/gps" style="font-size: 0.6em; margin-left: 10px;">Download All</a></h2>
         <table>
             <thead>
                 <tr>
